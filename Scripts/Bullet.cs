@@ -4,24 +4,23 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed;
-    public float lifetime;
-    public float distance;
-    public int damage;
-    public LayerMask whatIsSolid;
-    private Vector3 touchPosition;
-    private Vector3 direction;
-    private Rigidbody2D rb;
-    public bool gun = false;
-    public GameObject destroyEffect;
+    [SerializeField] private float speed, lifetime, distance;
+    [SerializeField] private int damage;
     
-    void Start()
+    [SerializeField] private LayerMask whatIsSolid;
+    [SerializeField] private GameObject destroyEffect;
+
+    private bool gun = false;
+    
+    private Rigidbody2D rb;
+    
+    private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        Invoke("Destroy", lifetime);
+        Invoke("DestroyBullet", lifetime);
     }
 
-    void Update()
+    private void Update()
     {
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up, distance, whatIsSolid);
         
@@ -30,7 +29,6 @@ public class Bullet : MonoBehaviour
             if (hitInfo.collider.CompareTag("Enemy"))
             {
                 hitInfo.collider.GetComponent<Enemy>().TakeDamage(damage);
-                
             }
 
             if (hitInfo.collider.CompareTag("Player"))
@@ -38,7 +36,7 @@ public class Bullet : MonoBehaviour
                 hitInfo.collider.GetComponent<Player>().TakeDamage(damage);
             }
 
-            Destroy();
+            DestroyBullet();
         }
         
         transform.Translate(Vector2.up * speed * Time.deltaTime);
@@ -49,7 +47,7 @@ public class Bullet : MonoBehaviour
         gun = !gun;
     }
 
-    void Destroy()
+    private void DestroyBullet()
     {
         Instantiate(destroyEffect, transform.position, Quaternion.identity);
         Destroy(gameObject);

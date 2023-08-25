@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    public LayerMask whatIsSolid;
+    [SerializeField] private LayerMask whatIsSolid;
 
-    void Update()
+    private void Update()
     {
         RaycastHit2D hitInfo = Physics2D.Raycast(transform.position, transform.up,  whatIsSolid);
         
